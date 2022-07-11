@@ -1,6 +1,7 @@
 package com.hepexta.concurrency.t1_hashmap;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,11 +14,12 @@ import java.util.concurrent.Executors;
 * */
 public class T1_HashMap {
 
-    private static final int NUMBER_ITERATION = 10_000;
+    private static final int NUMBER_ITERATION = 100_000;
 
     public static void main(String[] args) {
 
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new ConcurrentHashMap<>(); // ExecutionTime: 1201
+     //   Map<Integer, Integer> map = new ThreadSafeMap<>(); // ExecutionTime: 6139
         final Breaker breaker = new Breaker();
 
         ExecutorService service = Executors.newCachedThreadPool();
@@ -40,11 +42,13 @@ public class T1_HashMap {
         return () -> {
             while (breaker.isShouldWork()) {
                 try {
-                    long sum = map.values().stream().mapToLong(e -> e).sum();
+                //    long sum = map.values().parallelStream().mapToLong(e -> e).sum(); // ExecutionTime: 2665
+                    long sum = map.values().stream().mapToLong(e -> e).sum(); // ExecutionTime: 1201
                     System.out.println("Sum is " + sum);
                 }
                 catch (ConcurrentModificationException e) {
                     System.out.println("Error: "+e);
+                    e.printStackTrace();
                     breaker.setShouldWork(false);
                 }
             }
@@ -64,6 +68,7 @@ public class T1_HashMap {
                 }
                 catch (ConcurrentModificationException e) {
                     System.out.println("Error: "+e.getMessage());
+                    e.printStackTrace();
                     breaker.setShouldWork(false);
                 }
             }

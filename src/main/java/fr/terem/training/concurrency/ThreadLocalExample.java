@@ -14,7 +14,7 @@ public class ThreadLocalExample {
                 e.printStackTrace();
             }
 
-            System.out.println(threadLocal.get());
+            System.out.println(Thread.currentThread().getName()+threadLocal.get());
         }
     }
 

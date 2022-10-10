@@ -15,21 +15,21 @@ public class OperationsCompletableFuture {
 
     private final Random rnd = new Random();
 
-    private LongAdder totalTransferAttempts = new LongAdder();
-    private LongAdder totalUnsuccessTransfers = new LongAdder();
+    private final LongAdder totalTransferAttempts = new LongAdder();
+    private final LongAdder totalUnsuccessTransfers = new LongAdder();
 
     public void runTransfers(int count) {
         CompletableFuture<?>[] futures = new CompletableFuture[count];
 
         for (int i = 0; i < count; i++) {
-            CompletableFuture<Integer> futureAmount = CompletableFuture.supplyAsync(()->requestTransferAmount());
+            CompletableFuture<Integer> futureAmount = CompletableFuture.supplyAsync(this::requestTransferAmount);
 
-            CompletableFuture<Void> futureTransfer = CompletableFuture.supplyAsync(()->requestDestinationAccount())
+            CompletableFuture<Void> futureTransfer = CompletableFuture.supplyAsync(this::requestDestinationAccount)
                     .thenCombineAsync(futureAmount, (acc2, amount) -> createTransfer(acc1, acc2, amount))
-                    .thenApplyAsync(transfer -> transfer.perform())
-                    .exceptionally(ex -> processTransferException(ex))
-                    .thenAcceptAsync(result -> processTransferResult(result))
-                    .thenRunAsync(() -> updateTransferCount());
+                    .thenApplyAsync(Transfer::perform)
+                    .exceptionally(this::processTransferException)
+                    .thenAcceptAsync(this::processTransferResult)
+                    .thenRunAsync(this::updateTransferCount);
 
             futures[i] = futureTransfer;
         }

@@ -1,5 +1,5 @@
 package fr.terem.training.concurrency;
-import java.util.concurrent.atomic.AtomicInteger;
+
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -7,10 +7,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Account {
 
     private int balance;
-    private int id;
+    private final int id;
     //private int failCounter;
     private final LongAdder failCounter = new LongAdder();
-
 
     private final Lock lock = new ReentrantLock();
 

@@ -70,7 +70,7 @@ public class SyncronizedTransfer implements Callable<Boolean> {
                             accFrom.withdraw(amount);
                             accTo.deposit(amount);
 
-                            Thread.sleep(waitRandom.nextInt(2000));
+                            Thread.sleep(waitRandom.nextInt(200));
 
                             System.out.println("[" + id + "] " + "Transfer "
                                     + amount + " done from " + accFrom.getId()

@@ -8,8 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class OperationsSynchronizers {
-    private static final int NUM_A_B_TRANSFERS = 3;
-    private static final int NUM_B_A_TRANSFERS = 4;
+    private static final int NUM_A_B_TRANSFERS = 30;
+    private static final int NUM_B_A_TRANSFERS = 40;
 
     static volatile long transferAbStart;
     static volatile long transferAbEnd;

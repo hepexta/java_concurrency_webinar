@@ -47,12 +47,8 @@ public class OperationsService {
             final Account acc1) {
         ScheduledExecutorService amountMonitoring = Executors
                 .newScheduledThreadPool(1);
-        amountMonitoring.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                System.out.println("Failed transfers in Account 1: "
-                        + acc1.getFailCount());
-            }
-        }, 2, 3, TimeUnit.SECONDS);
+        amountMonitoring.scheduleAtFixedRate(() -> System.out.println("Failed transfers in Account 1: "
+                + acc1.getFailCount()), 2, 3, TimeUnit.SECONDS);
         return amountMonitoring;
     }
 
